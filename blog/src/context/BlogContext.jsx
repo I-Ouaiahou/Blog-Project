@@ -1,29 +1,41 @@
-import React, { createContext, useState, useContext } from 'react';
+// BlogContext.js
 
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 const BlogContext = createContext();
 
-
 export const BlogProvider = ({ children }) => {
- 
-  const [state, setState] = useState(/* initial state here */);
+    const [posts, setPosts] = useState([]);
 
-  
-  const updateState = (newState) => {
-    setState((prevState) => ({ ...prevState, ...newState }));
-  };
+    const createPost = (newPost) => {
+        setPosts((prevPosts) => [...prevPosts, newPost]);
+    };
 
- 
-  return (
-    <BlogContext.Provider value={{ ...state, updateState }}>
-      {children}
-    </BlogContext.Provider>
-  );
+    useEffect(() => {
+        const storedPosts = localStorage.getItem("blogPosts");
+        if (storedPosts) {
+            setPosts(JSON.parse(storedPosts));
+        }
+    }, []);
+
+    const updateState = (newState) => {
+        setPosts((prevPosts) => [...prevPosts, newState.post]);
+        // Save data to localStorage whenever the state changes
+        localStorage.setItem(
+            "blogPosts",
+            JSON.stringify([...posts, newState.post])
+        );
+    };
+
+    return (
+        <BlogContext.Provider value={{ posts, createPost, updateState }}>
+            {children}
+        </BlogContext.Provider>
+    );
 };
 
-
 export const useBlogContext = () => {
-  return useContext(BlogContext);
+    return useContext(BlogContext);
 };
 
 export default BlogContext;

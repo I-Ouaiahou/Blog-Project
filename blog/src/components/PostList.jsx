@@ -1,56 +1,91 @@
-import React from 'react';
-import { useBlogContext } from '../context/BlogContext';
+import React from "react";
+import { useBlogContext } from "../context/BlogContext";
 
 function PostList() {
-  const { posts } = useBlogContext();
+    const { posts } = useBlogContext();
 
-  // Check if posts is not defined or empty
-  if (!posts || posts.length === 0) {
+    if (!posts || posts.length === 0) {
+        return (
+            <div style={styles.container}>
+                <h2 style={styles.heading}>All Posts</h2>
+                <p style={styles.noPostsMessage}>No posts available.</p>
+            </div>
+        );
+    }
+
     return (
-      <div style={styles.container}>
-        <h2 style={styles.heading}>All Posts</h2>
-        <p style={styles.noPostsMessage}>No posts available.</p>
-      </div>
+        <div style={styles.container}>
+            <h2 style={styles.heading}>All Posts</h2>
+            <div style={styles.postListContainer}>
+                {posts.map((post, index) => (
+                    <div key={index} style={styles.postCard}>
+                        <h3 style={styles.postTitle}>
+                            {" "}
+                            Title:
+                            {post.title || "Untitled"}
+                        </h3>
+                        <p style={styles.postContent}>
+                            {" "}
+                            Content:
+                            {post.content || "No content"}
+                        </p>
+                        {/* <p style={styles.postDate}>
+                            <strong>Date:</strong> {post.date || "Unknown date"}
+                        </p>
+                        <p style={styles.postAuthor}>
+                            <strong>Author:</strong>{" "}
+                            {post.author || "Unknown author"} */}
+                        {/* </p> */}
+                    </div>
+                ))}
+            </div>
+        </div>
     );
-  }
-
-  return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>All Posts</h2>
-      <ul style={styles.postList}>
-        {posts.map((post, index) => (
-          <li key={index} style={styles.postItem}>
-            <strong>{post.title}</strong> - {post.date} by {post.author}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
 }
 
 const styles = {
-  container: {
-    maxWidth: '600px',
-    margin: '0 auto',
-    padding: '20px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-  },
-  heading: {
-    fontSize: '20px',
-    marginBottom: '10px',
-  },
-  noPostsMessage: {
-    fontStyle: 'italic',
-    color: '#888',
-  },
-  postList: {
-    listStyle: 'none',
-    padding: '0',
-  },
-  postItem: {
-    marginBottom: '10px',
-  },
+    container: {
+        maxWidth: "600px",
+        margin: "0 auto",
+        padding: "20px",
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+    },
+    postListContainer: {
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-around",
+    },
+    postTitle: {
+        fontSize: "18px",
+        marginBottom: "8px",
+    },
+    postContent: {
+        marginBottom: "8px",
+    },
+    postCard: {
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        padding: "16px",
+        margin: "8px",
+        width: "300px",
+        boxSizing: "border-box",
+    },
+    heading: {
+        fontSize: "20px",
+        marginBottom: "10px",
+    },
+    noPostsMessage: {
+        fontStyle: "italic",
+        color: "#888",
+    },
+    postList: {
+        listStyle: "none",
+        padding: "0",
+    },
+    postItem: {
+        marginBottom: "10px",
+    },
 };
 
 export default PostList;

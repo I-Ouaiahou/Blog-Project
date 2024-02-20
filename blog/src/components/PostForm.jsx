@@ -1,40 +1,45 @@
-import React, { useState } from 'react';
-import { useBlogContext } from '../context/BlogContext';
+// PostForm.js
 
-function PostForm() {
-  const { createPost } = useBlogContext();
-  const [formData, setFormData] = useState({ title: '', content: '' });
+import React, { useState } from "react";
+import { useBlogContext } from "../context/BlogContext";
 
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+function PostForm({ onSave, onCancel }) {
+    const [formData, setFormData] = useState({ title: "", content: "" });
+    const { updateState } = useBlogContext();
 
-  const handleCreatePost = () => {
-    createPost(formData);
-    setFormData({ title: '', content: '' });
-  };
+    const handleInputChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-  return (
-    <div>
-      <h2>Create a New Post</h2>
-      <label>Title:</label>
-      <input
-        type="text"
-        name="title"
-        value={formData.title}
-        onChange={handleInputChange}
-      />
+    const handleCreatePost = () => {
+        console.log("onSave:", typeof onSave, onSave);
+        onSave(formData);
+        updateState({ post: formData }); // Assuming you have a post property in newState
+        setFormData({ title: "", content: "" });
+    };
 
-      <label>Content:</label>
-      <textarea
-        name="content"
-        value={formData.content}
-        onChange={handleInputChange}
-      />
+    return (
+        <div>
+            <h2>Create a New Post</h2>
+            <label>Title:</label>
+            <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+            />
 
-      <button onClick={handleCreatePost}>Create Post</button>
-    </div>
-  );
+            <label>Content:</label>
+            <textarea
+                name="content"
+                value={formData.content}
+                onChange={handleInputChange}
+            />
+
+            <button onClick={handleCreatePost}>Create Post</button>
+            <button onClick={onCancel}>Cancel</button>
+        </div>
+    );
 }
 
 export default PostForm;
