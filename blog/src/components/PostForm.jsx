@@ -17,22 +17,28 @@ function PostForm() {
   return (
     <div>
       <h2>Create a New Post</h2>
-      <label>Title:</label>
+      <div>
+      <label className='label'>Title:</label>
       <input
+      className='input'
         type="text"
         name="title"
         value={formData.title}
         onChange={handleInputChange}
       />
+      </div>
 
-      <label>Content:</label>
+     <div>
+     <label className='label'>Content:</label>
       <textarea
+      className='textarea'
         name="content"
         value={formData.content}
         onChange={handleInputChange}
       />
+     </div>
 
-      <button onClick={handleCreatePost}>Create Post</button>
+      <button className='button' onClick={handleCreatePost}>Create Post</button>
     </div>
   );
 }

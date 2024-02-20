@@ -17,6 +17,26 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+body {
+  margin: 0;
+  background-color: #242424;
+  color: rgba(275, 275, 275, 0,27);
+}
+.input {
+  width: 30%;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+.textarea {
+  width: 50%;
+  height: 60px;
+  border-radius: 10px;
+}
+.button {
+ padding: 10px 30px;
+  border: none;
+  cursor: pointer;
+}
 
 @keyframes logo-spin {
   from {
@@ -39,4 +59,11 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.app-container {
+  max-width: 1000px;
+  width: 100%;
+  padding: 30px;
+  box-sizing: border-box;
 }
