@@ -1,7 +1,16 @@
 import React, { useContext } from "react";
 import { BlogContext } from "../context/BlogContext";
+
 function PostList() {
-    const { posts } = useContext(BlogContext);
+    const { posts, deletePost, modifiedPost } = useContext(BlogContext);
+
+    const handleDelete = (post) => {
+        deletePost(post);
+    };
+    const handleModify = (post) => {
+        modifiedPost(post);
+        console.log("modify post", post);
+    };
 
     console.log("Posts in PostList:", posts); // Log the posts array
 
@@ -28,6 +37,14 @@ function PostList() {
                             {" "}
                             Content: {post?.content || "No content"}
                         </p>
+                        <div style={styles.buttonsContainer}>
+                            <button onClick={() => handleModify(post)}>
+                                Modify
+                            </button>
+                            <button onClick={() => handleDelete(post)}>
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>

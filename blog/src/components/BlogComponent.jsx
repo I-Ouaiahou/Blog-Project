@@ -56,14 +56,6 @@ function BlogComponent() {
         }
     }
 
-    function handleDisplayPosts() {
-        console.log(posts);
-    }
-
-    function handleViewPost() {
-        console.log("View Post");
-    }
-
     return (
         <div style={styles.container}>
             <h1 style={{ textAlign: "center" }}>React Blog</h1>
@@ -71,15 +63,12 @@ function BlogComponent() {
                 <button style={styles.button} onClick={startCreatingPost}>
                     Create Post
                 </button>
-                <button style={styles.button} onClick={startModifyingPost}>
+                {/* <CiEdit style={styles.button} onClick={startModifyingPost}>
                     Modify Post
-                </button>
-                <button style={styles.button} onClick={handleDeletePost}>
+                </CiEdit>
+                <FaDeleteLeft style={styles.button} onClick={handleDeletePost}>
                     Delete Post
-                </button>
-                <button style={styles.button} onClick={handleDisplayPosts}>
-                    Display Posts
-                </button>
+                </FaDeleteLeft> */}
             </div>
 
             {isCreatingPost && (
@@ -123,13 +112,6 @@ function BlogComponent() {
             )}
 
             <PostList posts={posts} />
-
-            <div>
-                <h2 style={styles.subHeading}>View Post</h2>
-                <button style={styles.button} onClick={handleViewPost}>
-                    View Post
-                </button>
-            </div>
         </div>
     );
 }
