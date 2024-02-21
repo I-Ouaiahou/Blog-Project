@@ -1,14 +1,16 @@
 import React, { useContext } from "react";
 import { BlogContext } from "../context/BlogContext";
+import { MdDeleteOutline } from "react-icons/md";
+import { FaRegEdit } from "react-icons/fa";
 
 function PostList() {
-    const { posts, deletePost, modifiedPost } = useContext(BlogContext);
+    const { posts, deletePost, modifyPost } = useContext(BlogContext);
 
     const handleDelete = (post) => {
         deletePost(post);
     };
     const handleModify = (post) => {
-        modifiedPost(post);
+        modifyPost(post);
         console.log("modify post", post);
     };
 
@@ -38,12 +40,12 @@ function PostList() {
                             Content: {post?.content || "No content"}
                         </p>
                         <div style={styles.buttonsContainer}>
-                            <button onClick={() => handleModify(post)}>
+                            <FaRegEdit onClick={() => handleModify(post)}>
                                 Modify
-                            </button>
-                            <button onClick={() => handleDelete(post)}>
+                            </FaRegEdit>
+                            <MdDeleteOutline onClick={() => handleDelete(post)}>
                                 Delete
-                            </button>
+                            </MdDeleteOutline>
                         </div>
                     </div>
                 ))}

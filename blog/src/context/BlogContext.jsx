@@ -23,6 +23,20 @@ export const BlogProvider = ({ children }) => {
         updateState({ post: newPost });
     };
 
+    const deletePost = (postToDelete) => {
+        const updatedPosts = posts.filter((post) => post !== postToDelete);
+        setPosts(updatedPosts);
+        localStorage.setItem("blogPosts", JSON.stringify(updatedPosts));
+    };
+
+    const modifyPost = (modifiedPost) => {
+        const updatedPosts = posts.map((post) =>
+            post === modifiedPost ? { ...post, isModified: true } : post
+        );
+        setPosts(updatedPosts);
+        localStorage.setItem("blogPosts", JSON.stringify(updatedPosts));
+    };
+
     useEffect(() => {
         try {
             const storedPosts = localStorage.getItem("blogPosts");
@@ -35,7 +49,9 @@ export const BlogProvider = ({ children }) => {
     }, []);
 
     return (
-        <BlogContext.Provider value={{ posts, createPost, updateState }}>
+        <BlogContext.Provider
+            value={{ posts, createPost, updateState, deletePost, modifyPost }}
+        >
             {children}
         </BlogContext.Provider>
     );

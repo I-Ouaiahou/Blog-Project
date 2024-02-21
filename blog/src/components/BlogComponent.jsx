@@ -4,8 +4,7 @@ import PostForm from "./PostForm";
 import PostList from "./PostList";
 
 function BlogComponent() {
-    const { posts, createPost, modifyPost, deletePost, updateState } =
-        useContext(BlogContext);
+    const { posts, updateState } = useContext(BlogContext);
     console.log("Posts:", posts);
     const [isCreatingPost, setIsCreatingPost] = useState(false);
     const [isModifyingPost, setIsModifyingPost] = useState(false);
@@ -45,15 +44,6 @@ function BlogComponent() {
         updateState([modifiedPost]);
         setFormData({ title: "", content: "" });
         setIsModifyingPost(false);
-    }
-
-    function handleDeletePost() {
-        if (posts && posts.length > 0) {
-            const postToDelete = posts[0];
-            deletePost(postToDelete);
-        } else {
-            console.log("No posts to delete.");
-        }
     }
 
     return (
