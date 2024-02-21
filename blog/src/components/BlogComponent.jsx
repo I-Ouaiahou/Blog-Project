@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useBlogContext } from '../context/BlogContext';
 import PostForm from './PostForm';
 import PostList from './PostList';
@@ -7,7 +7,16 @@ function BlogComponent() {
   const { posts, createPost, modifyPost, deletePost } = useBlogContext();
   const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [isModifyingPost, setIsModifyingPost] = useState(false);
+  const [displayPosts, setDisplayPosts] = useState(false);
   const [formData, setFormData] = useState({ title: '', content: '' });
+
+ 
+  useEffect(() => {
+    const savedPosts = localStorage.getItem('blogPosts');
+    if (savedPosts) {
+      createPost(JSON.parse(savedPosts));
+    }
+  }, []);
 
   function startCreatingPost() {
     setIsCreatingPost(true);
@@ -19,10 +28,20 @@ function BlogComponent() {
   }
 
   function handleCreatePost() {
-    createPost(formData);
+    const newPosts = [...posts, formData];
+    
+    // Keep a maximum of 10 posts
+    const limitedPosts = newPosts.slice(-10);
+  
+    createPost(limitedPosts);
+  
+    // Save limited posts to local storage
+    localStorage.setItem('blogPosts', JSON.stringify(limitedPosts));
+  
     setFormData({ title: '', content: '' });
     setIsCreatingPost(false);
   }
+  
 
   function startModifyingPost() {
     setIsModifyingPost(true);
@@ -49,16 +68,16 @@ function BlogComponent() {
   }
 
   function handleDisplayPosts() {
-    console.log(posts);
+    setDisplayPosts(true);
   }
 
-  function handleViewPost() {
-    console.log('View Post');
+  function handleHidePosts() {
+    setDisplayPosts(false);
   }
 
   return (
     <div style={styles.container}>
-      <h1 style={{textAlign: "center"}}>React Blog</h1>
+      <h1 style={{ textAlign: 'center' }}>React Blog</h1>
       <div style={styles.buttonsContainer}>
         <button style={styles.button} onClick={startCreatingPost}>
           Create Post
@@ -70,24 +89,36 @@ function BlogComponent() {
           Delete Post
         </button>
         <button style={styles.button} onClick={handleDisplayPosts}>
-          Display Posts
+          View Posts
         </button>
+        {displayPosts && (
+          <button style={styles.button} onClick={handleHidePosts}>
+            Hide Posts
+          </button>
+        )}
       </div>
 
-      {isCreatingPost && <PostForm onSave={handleCreatePost} onCancel={cancelCreatingPost} />}
+      {isCreatingPost && (
+        <PostForm onSave={handleCreatePost} onCancel={cancelCreatingPost} />
+      )}
+
       {isModifyingPost && (
         <div>
           <label>Title:</label>
           <input
             type="text"
             value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
           />
 
           <label>Content:</label>
           <textarea
             value={formData.content}
-            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, content: e.target.value })
+            }
           />
 
           <button style={styles.button} onClick={handleModifyPost}>
@@ -99,14 +130,13 @@ function BlogComponent() {
         </div>
       )}
 
-      <PostList posts={posts} />
-
-      <div>
-        <h2 style={styles.subHeading}>View Post</h2>
-        <button style={styles.button} onClick={handleViewPost}>
-          View Post
-        </button>
-      </div>
+      {displayPosts && (
+        <div>
+          <h2 style={styles.subHeading}>View Post</h2>
+          {/* Display posts here */}
+          <PostList posts={posts} />
+        </div>
+      )}
     </div>
   );
 }
