@@ -1,20 +1,24 @@
 // PostForm.js
 
-import React, { useState } from "react";
-import { useBlogContext } from "../context/BlogContext";
+import React, { useState, useContext } from "react";
+import { BlogContext } from "../context/BlogContext";
 
-function PostForm({ onSave, onCancel }) {
-    const [formData, setFormData] = useState({ title: "", content: "" });
-    const { updateState } = useBlogContext();
+function PostForm({ onSave, onCancel, setFormData, formData }) {
+    const { updateState } = useContext(BlogContext);
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        // console.log("targetValue:", e.target.value);
+        // console.log("targetName:", e.target.name);
+        // console.log("DATA:", formData);
     };
 
     const handleCreatePost = () => {
-        console.log("onSave:", typeof onSave, onSave);
+        // console.log("onSave:", typeof onSave, onSave);
         onSave(formData);
+        // console.log("formData:", formData);
         updateState({ post: formData }); // Assuming you have a post property in newState
+
         setFormData({ title: "", content: "" });
     };
 

@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { useBlogContext } from "../context/BlogContext";
+import React, { useState, useContext } from "react";
+import { BlogContext } from "../context/BlogContext";
 import PostForm from "./PostForm";
 import PostList from "./PostList";
 
 function BlogComponent() {
     const { posts, createPost, modifyPost, deletePost, updateState } =
-        useBlogContext();
+        useContext(BlogContext);
+    console.log("Posts:", posts);
     const [isCreatingPost, setIsCreatingPost] = useState(false);
     const [isModifyingPost, setIsModifyingPost] = useState(false);
     const [formData, setFormData] = useState({ title: "", content: "" });
@@ -21,7 +22,8 @@ function BlogComponent() {
 
     function handleCreatePost() {
         const newPost = { title: formData.title, content: formData.content };
-        updateState([newPost]);
+        // console.log("newPost:", newPost);
+        updateState({ post: newPost });
         setFormData({ title: "", content: "" });
         setIsCreatingPost(false);
     }
@@ -82,6 +84,8 @@ function BlogComponent() {
 
             {isCreatingPost && (
                 <PostForm
+                    setFormData={setFormData}
+                    formData={formData}
                     onSave={handleCreatePost}
                     onCancel={cancelCreatingPost}
                 />
@@ -93,9 +97,9 @@ function BlogComponent() {
                     <input
                         type="text"
                         value={formData.title}
-                        onChange={(e) =>
-                            setFormData({ ...formData, title: e.target.value })
-                        }
+                        onChange={(e) => {
+                            setFormData({ ...formData, title: e.target.value });
+                        }}
                     />
 
                     <label>Content:</label>

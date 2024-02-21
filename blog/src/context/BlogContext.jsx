@@ -2,30 +2,37 @@
 
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-const BlogContext = createContext();
+export const BlogContext = createContext();
 
 export const BlogProvider = ({ children }) => {
     const [posts, setPosts] = useState([]);
 
+    const updateState = (newState) => {
+        const updatedPosts = [
+            ...(posts || []), // Use existing posts or initialize an empty array
+            newState?.post || {}, // Use the new post or initialize an empty object
+        ];
+
+        setPosts(updatedPosts);
+
+        // Save data to localStorage whenever the state changes
+        localStorage.setItem("blogPosts", JSON.stringify(updatedPosts));
+    };
+
     const createPost = (newPost) => {
-        setPosts((prevPosts) => [...prevPosts, newPost]);
+        updateState({ post: newPost });
     };
 
     useEffect(() => {
-        const storedPosts = localStorage.getItem("blogPosts");
-        if (storedPosts) {
-            setPosts(JSON.parse(storedPosts));
+        try {
+            const storedPosts = localStorage.getItem("blogPosts");
+            if (storedPosts) {
+                setPosts(JSON.parse(storedPosts));
+            }
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
         }
     }, []);
-
-    const updateState = (newState) => {
-        setPosts((prevPosts) => [...prevPosts, newState.post]);
-        // Save data to localStorage whenever the state changes
-        localStorage.setItem(
-            "blogPosts",
-            JSON.stringify([...posts, newState.post])
-        );
-    };
 
     return (
         <BlogContext.Provider value={{ posts, createPost, updateState }}>
@@ -34,8 +41,8 @@ export const BlogProvider = ({ children }) => {
     );
 };
 
-export const useBlogContext = () => {
-    return useContext(BlogContext);
-};
+// export const useBlogContext = () => {
+//     return useContext(BlogContext);
+// };
 
 export default BlogContext;
