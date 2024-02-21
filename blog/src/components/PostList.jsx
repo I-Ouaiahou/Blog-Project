@@ -4,7 +4,7 @@ import { useBlogContext } from '../context/BlogContext';
 function PostList() {
   const { posts } = useBlogContext();
 
-  // Check if posts is not defined or empty
+ 
   if (!posts || posts.length === 0) {
     return (
       <div style={styles.container}>

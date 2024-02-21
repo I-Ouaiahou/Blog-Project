@@ -30,12 +30,12 @@ function BlogComponent() {
   function handleCreatePost() {
     const newPosts = [...posts, formData];
     
-    // Keep a maximum of 10 posts
+   
     const limitedPosts = newPosts.slice(-10);
   
     createPost(limitedPosts);
   
-    // Save limited posts to local storage
+    
     localStorage.setItem('blogPosts', JSON.stringify(limitedPosts));
   
     setFormData({ title: '', content: '' });
