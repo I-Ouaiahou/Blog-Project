@@ -8,16 +8,12 @@ function PostForm({ onSave, onCancel, setFormData, formData }) {
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        // console.log("targetValue:", e.target.value);
-        // console.log("targetName:", e.target.name);
-        // console.log("DATA:", formData);
     };
 
     const handleCreatePost = () => {
-        // console.log("onSave:", typeof onSave, onSave);
         onSave(formData);
-        // console.log("formData:", formData);
-        updateState({ post: formData }); // Assuming you have a post property in newState
+
+        updateState({ post: formData });
 
         setFormData({ title: "", content: "" });
     };
