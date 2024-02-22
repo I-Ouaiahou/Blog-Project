@@ -5,6 +5,7 @@ import PostList from "./PostList";
 
 function BlogComponent() {
     const { posts, updateState } = useContext(BlogContext);
+    console.log(posts);
     console.log("Posts:", posts);
     const [isCreatingPost, setIsCreatingPost] = useState(false);
     const [isModifyingPost, setIsModifyingPost] = useState(false);
@@ -21,7 +22,6 @@ function BlogComponent() {
 
     function handleCreatePost() {
         const newPost = { title: formData.title, content: formData.content };
-        // console.log("newPost:", newPost);
         updateState({ post: newPost });
         setFormData({ title: "", content: "" });
         setIsCreatingPost(false);
@@ -53,12 +53,6 @@ function BlogComponent() {
                 <button style={styles.button} onClick={startCreatingPost}>
                     Create Post
                 </button>
-                {/* <CiEdit style={styles.button} onClick={startModifyingPost}>
-                    Modify Post
-                </CiEdit>
-                <FaDeleteLeft style={styles.button} onClick={handleDeletePost}>
-                    Delete Post
-                </FaDeleteLeft> */}
             </div>
 
             {isCreatingPost && (

@@ -1,20 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { BlogContext } from "../context/BlogContext";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 
 function PostList() {
     const { posts, deletePost, modifyPost } = useContext(BlogContext);
+    const [modifiedPost, setModifiedPost] = useState(null);
 
     const handleDelete = (post) => {
         deletePost(post);
     };
     const handleModify = (post) => {
-        modifyPost(post);
-        console.log("modify post", post);
+        setModifiedPost(post);
+        // console.log("modify post", post);
+    };
+    const handleSaveChanges = () => {
+        modifyPost(modifiedPost);
+        setModifiedPost(null);
     };
 
-    console.log("Posts in PostList:", posts); // Log the posts array
+    // console.log("Posts in PostList:", posts);
 
     if (!posts || posts.length === 0) {
         return (
@@ -40,10 +45,16 @@ function PostList() {
                             Content: {post?.content || "No content"}
                         </p>
                         <div style={styles.buttonsContainer}>
-                            <FaRegEdit onClick={() => handleModify(post)}>
+                            <FaRegEdit
+                                style={{ cursor: "pointer" }}
+                                onClick={() => handleModify(post)}
+                            >
                                 Modify
                             </FaRegEdit>
-                            <MdDeleteOutline onClick={() => handleDelete(post)}>
+                            <MdDeleteOutline
+                                style={{ cursor: "pointer" }}
+                                onClick={() => handleDelete(post)}
+                            >
                                 Delete
                             </MdDeleteOutline>
                         </div>
@@ -72,6 +83,7 @@ const styles = {
     },
     postContent: {
         marginBottom: "8px",
+        wordWrap: "break-word",
     },
     postCard: {
         border: "1px solid #ccc",

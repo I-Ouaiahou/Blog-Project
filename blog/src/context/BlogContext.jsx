@@ -8,14 +8,10 @@ export const BlogProvider = ({ children }) => {
     const [posts, setPosts] = useState([]);
 
     const updateState = (newState) => {
-        const updatedPosts = [
-            ...(posts || []), // Use existing posts or initialize an empty array
-            newState?.post || {}, // Use the new post or initialize an empty object
-        ];
+        const updatedPosts = [...(posts || []), newState?.post || {}];
 
         setPosts(updatedPosts);
 
-        // Save data to localStorage whenever the state changes
         localStorage.setItem("blogPosts", JSON.stringify(updatedPosts));
     };
 

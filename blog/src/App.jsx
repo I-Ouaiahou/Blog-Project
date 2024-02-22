@@ -1,16 +1,27 @@
 import React from "react";
-import { BlogProvider } from "./context/BlogContext";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import BlogComponent from "./components/BlogComponent";
-import PostForm from "./components/PostForm";
-import PostList from "./components/PostList";
+import AdminComponent from "./components/AdminComponent";
+import UserComponent from "./components/UserComponent";
+import { BlogProvider } from "./context/BlogContext";
 import "./App.css";
+
 function App() {
+    const isAdmin = true;
+
     return (
-        <BlogProvider>
-            <BlogComponent />
-            {/* <PostForm />
-            <PostList /> */}
-        </BlogProvider>
+        <Router>
+            <BlogProvider>
+                <Routes>
+                    <Route path="/" element={<BlogComponent />} />
+                    {isAdmin && (
+                        <Route path="/admin" element={<AdminComponent />} />
+                    )}
+                    <Route path="/user" element={<UserComponent />} />
+                </Routes>
+            </BlogProvider>
+        </Router>
     );
 }
 export default App;
