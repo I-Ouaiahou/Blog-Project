@@ -65,105 +65,122 @@ function BlogComponent() {
     } else {
       console.log('No posts to delete.');
     }
-  }
 
-  function handleDisplayPosts() {
-    setDisplayPosts(true);
-  }
+    function cancelCreatingPost() {
+        setIsCreatingPost(false);
+        setFormData({ title: "", content: "" });
+    }
 
-  function handleHidePosts() {
-    setDisplayPosts(false);
-  }
+    function handleCreatePost() {
+        const newPost = { title: formData.title, content: formData.content };
+        // console.log("newPost:", newPost);
+        updateState({ post: newPost });
+        setFormData({ title: "", content: "" });
+        setIsCreatingPost(false);
+    }
 
-  return (
-    <div style={styles.container}>
-      <h1 style={{ textAlign: 'center' }}>React Blog</h1>
-      <div style={styles.buttonsContainer}>
-        <button style={styles.button} onClick={startCreatingPost}>
-          Create Post
-        </button>
-        <button style={styles.button} onClick={startModifyingPost}>
-          Modify Post
-        </button>
-        <button style={styles.button} onClick={handleDeletePost}>
-          Delete Post
-        </button>
-        <button style={styles.button} onClick={handleDisplayPosts}>
-          View Posts
-        </button>
-        {displayPosts && (
-          <button style={styles.button} onClick={handleHidePosts}>
-            Hide Posts
-          </button>
-        )}
-      </div>
+    function startModifyingPost() {
+        setIsModifyingPost(true);
+    }
 
-      {isCreatingPost && (
-        <PostForm onSave={handleCreatePost} onCancel={cancelCreatingPost} />
-      )}
+    function cancelModifyingPost() {
+        setIsModifyingPost(false);
+        setFormData({ title: "", content: "" });
+    }
 
-      {isModifyingPost && (
-        <div>
-          <label>Title:</label>
-          <input
-            type="text"
-            value={formData.title}
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
-          />
+    function handleModifyPost() {
+        const modifiedPost = {
+            title: formData.title,
+            content: formData.content,
+        };
+        updateState([modifiedPost]);
+        setFormData({ title: "", content: "" });
+        setIsModifyingPost(false);
+    }
 
-          <label>Content:</label>
-          <textarea
-            value={formData.content}
-            onChange={(e) =>
-              setFormData({ ...formData, content: e.target.value })
-            }
-          />
+    return (
+        <div style={styles.container}>
+            <h1 style={{ textAlign: "center" }}>Welcome to Blogging</h1>
+            <div style={styles.buttonsContainer}>
+                <button style={styles.button} onClick={startCreatingPost}>
+                    Create Post
+                </button>
+                {/* <CiEdit style={styles.button} onClick={startModifyingPost}>
+                    Modify Post
+                </CiEdit>
+                <FaDeleteLeft style={styles.button} onClick={handleDeletePost}>
+                    Delete Post
+                </FaDeleteLeft> */}
+            </div>
 
-          <button style={styles.button} onClick={handleModifyPost}>
-            Save Changes
-          </button>
-          <button style={styles.button} onClick={cancelModifyingPost}>
-            Cancel
-          </button>
+            {isCreatingPost && (
+                <PostForm
+                    setFormData={setFormData}
+                    formData={formData}
+                    onSave={handleCreatePost}
+                    onCancel={cancelCreatingPost}
+                />
+            )}
+
+            {isModifyingPost && (
+                <div>
+                    <label>Title:</label>
+                    <input
+                        type="text"
+                        value={formData.title}
+                        onChange={(e) => {
+                            setFormData({ ...formData, title: e.target.value });
+                        }}
+                    />
+
+                    <label>Content:</label>
+                    <textarea
+                        value={formData.content}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                content: e.target.value,
+                            })
+                        }
+                    />
+
+                    <button style={styles.button} onClick={handleModifyPost}>
+                        Save Changes
+                    </button>
+                    <button style={styles.button} onClick={cancelModifyingPost}>
+                        Cancel
+                    </button>
+                </div>
+            )}
+
+            <PostList posts={posts} />
         </div>
-      )}
-
-      {displayPosts && (
-        <div>
-          <h2 style={styles.subHeading}>View Post</h2>
-          {/* Display posts here */}
-          <PostList posts={posts} />
-        </div>
-      )}
-    </div>
-  );
+    );
 }
 
 const styles = {
-  container: {
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '20px',
-  },
-  heading: {
-    fontSize: '24px',
-    marginBottom: '20px',
-  },
-  subHeading: {
-    fontSize: '20px',
-    marginBottom: '10px',
-  },
-  buttonsContainer: {
-    marginBottom: '20px',
-  },
-  button: {
-    margin: '5px',
-    padding: '8px 16px',
-    fontSize: '16px',
-    cursor: 'pointer',
-  },
+    container: {
+        maxWidth: "800px",
+        margin: "0 auto",
+        padding: "20px",
+    },
+    heading: {
+        fontSize: "24px",
+        marginBottom: "20px",
+    },
+    subHeading: {
+        fontSize: "20px",
+        marginBottom: "10px",
+    },
+    buttonsContainer: {
+        marginBottom: "20px",
+    },
+    button: {
+        margin: "5px",
+        padding: "8px 16px",
+        fontSize: "16px",
+        cursor: "pointer",
+    },
 };
-
+}
 export default BlogComponent;
