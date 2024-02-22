@@ -26,22 +26,25 @@ function PostForm({ onSave, onCancel, setFormData, formData }) {
         <div>
             <h2>Create a New Post</h2>
             <label>Title:</label>
-            <input
+            <div>
+            <input className="input"
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleInputChange}
             />
+            </div>
 
-            <label>Content:</label>
+           <div className="label"> <label>Content:</label></div>
             <textarea
                 name="content"
                 value={formData.content}
                 onChange={handleInputChange}
             />
 
-            <button onClick={handleCreatePost}>Create Post</button>
-            <button onClick={onCancel}>Cancel</button>
+            <div className="create-post1"><button className="create-button1" onClick={handleCreatePost}>Create Post</button>
+             <button className="create-button2" onClick={onCancel}>Cancel</button>
+             </div>
         </div>
     );
 }

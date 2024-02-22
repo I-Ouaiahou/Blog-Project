@@ -48,7 +48,7 @@ function BlogComponent() {
 
     return (
         <div style={styles.container}>
-            <h1 style={{ textAlign: "center" }}>React Blog</h1>
+            <h1 style={{ textAlign: "center" }}>Welcome to Blogging</h1>
             <div style={styles.buttonsContainer}>
                 <button style={styles.button} onClick={startCreatingPost}>
                     Create Post
