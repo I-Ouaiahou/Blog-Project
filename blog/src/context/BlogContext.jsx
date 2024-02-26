@@ -13,14 +13,10 @@ export const BlogProvider = ({ children }) => {
         }
     });
 
-    const updateState = (newState) => {
-        const updatedPosts = [...(posts || []), newState?.post || {}];
+    const createPost = (newPost) => {
+        const updatedPosts = [...(posts || []), newPost];
         setPosts(updatedPosts);
         localStorage.setItem("blogPosts", JSON.stringify(updatedPosts));
-    };
-
-    const createPost = (newPost) => {
-        updateState({ post: newPost });
     };
 
     const deletePost = (postToDelete) => {
@@ -50,7 +46,7 @@ export const BlogProvider = ({ children }) => {
 
     return (
         <BlogContext.Provider
-            value={{ posts, createPost, updateState, deletePost, modifyPost }}
+            value={{ posts, createPost, deletePost, modifyPost }}
         >
             {children}
         </BlogContext.Provider>
