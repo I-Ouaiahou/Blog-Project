@@ -1,4 +1,3 @@
-// PostForm.js
 
 import React, { useState, useContext } from "react";
 import { BlogContext } from "../context/BlogContext";

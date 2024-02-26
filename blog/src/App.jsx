@@ -1,6 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import BlogComponent from "./components/BlogComponent";
 import AdminComponent from "./components/AdminComponent";
 import UserComponent from "./components/UserComponent";
@@ -24,4 +23,5 @@ function App() {
         </Router>
     );
 }
+
 export default App;
