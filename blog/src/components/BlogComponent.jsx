@@ -1,19 +1,26 @@
-import React, { useState, useContext } from "react";
-import { BlogContext } from "../context/BlogContext";
-import PostForm from "./PostForm";
-import PostList from "./PostList";
+import React, { useState, useEffect } from 'react';
+import { useBlogContext } from '../context/BlogContext';
+import PostForm from './PostForm';
+import PostList from './PostList';
 
 function BlogComponent() {
-    const { posts, updateState } = useContext(BlogContext);
-    console.log(posts);
-    console.log("Posts:", posts);
-    const [isCreatingPost, setIsCreatingPost] = useState(false);
-    const [isModifyingPost, setIsModifyingPost] = useState(false);
-    const [formData, setFormData] = useState({ title: "", content: "" });
+  const { posts, createPost, modifyPost, deletePost } = useBlogContext();
+  const [isCreatingPost, setIsCreatingPost] = useState(false);
+  const [isModifyingPost, setIsModifyingPost] = useState(false);
+  const [displayPosts, setDisplayPosts] = useState(false);
+  const [formData, setFormData] = useState({ title: '', content: '' });
 
-    function startCreatingPost() {
-        setIsCreatingPost(true);
+ 
+  useEffect(() => {
+    const savedPosts = localStorage.getItem('blogPosts');
+    if (savedPosts) {
+      createPost(JSON.parse(savedPosts));
     }
+  }, []);
+
+  function startCreatingPost() {
+    setIsCreatingPost(true);
+  }
 
     function cancelCreatingPost() {
         setIsCreatingPost(false);
@@ -41,9 +48,9 @@ function BlogComponent() {
           title: formData.title,
           content: formData.content,
       };
-      
+      // Find the index of the post to modify in the posts array
       const postIndex = posts.findIndex((post) => post.title === formData.title);
-    
+      // Update the state with the modified post
       updateState((prevPosts) => {
           const newPosts = [...prevPosts];
           newPosts[postIndex] = modifiedPost;

@@ -1,7 +1,5 @@
-
-import React, { useState, useContext } from "react";
-import { BlogContext } from "../context/BlogContext";
-
+import React, { useState } from 'react';
+import { useBlogContext } from '../context/BlogContext';
 
 function PostForm({ onSave, onCancel, setFormData, formData }) {
   const { updateState } = useContext(BlogContext);
