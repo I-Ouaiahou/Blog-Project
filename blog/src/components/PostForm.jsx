@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { useBlogContext } from '../context/BlogContext';
+
+import React, { useState, useContext } from "react";
+import { BlogContext } from "../context/BlogContext";
+
 
 function PostForm({ onSave, onCancel, setFormData, formData }) {
   const { updateState } = useContext(BlogContext);
@@ -21,7 +23,7 @@ function PostForm({ onSave, onCancel, setFormData, formData }) {
           <h2>Create a New Post</h2>
           {formData && (
               <>
-                  <label style={{color: 'black'}}>Title:</label>
+                  <label style={{color: black}}>Title:</label>
                   <div>
                       <input
                           className="input"
