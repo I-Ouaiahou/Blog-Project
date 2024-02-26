@@ -1,32 +1,60 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect } from "react";
 
-const BlogContext = createContext();
+export const BlogContext = createContext();
 
 export const BlogProvider = ({ children }) => {
-  const [state, setState] = useState({ posts: [] });
+    const [posts, setPosts] = useState(() => {
+        try {
+            const storedPosts = localStorage.getItem("blogPosts");
+            return storedPosts ? JSON.parse(storedPosts) : [];
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+            return [];
+        }
+    });
 
-  const updateState = (newState) => {
-    setState((prevState) => ({ ...prevState, ...newState }));
-  };
+    const updateState = (newState) => {
+        const updatedPosts = [...(posts || []), newState?.post || {}];
+        setPosts(updatedPosts);
+        localStorage.setItem("blogPosts", JSON.stringify(updatedPosts));
+    };
 
-  const createPost = (newPost) => {
-    updateState({ posts: [...state.posts, newPost] });
-  };
+    const createPost = (newPost) => {
+        updateState({ post: newPost });
+    };
 
-  useEffect(() => {
-    
-    localStorage.setItem('blogPosts', JSON.stringify(state.posts));
-  }, [state.posts]);
+    const deletePost = (postToDelete) => {
+        const updatedPosts = posts.filter((post) => post !== postToDelete);
+        setPosts(updatedPosts);
+        localStorage.setItem("blogPosts", JSON.stringify(updatedPosts));
+    };
 
-  return (
-    <BlogContext.Provider value={{ ...state, createPost, updateState }}>
-      {children}
-    </BlogContext.Provider>
-  );
-};
+    const modifyPost = (modifiedPost) => {
+        const updatedPosts = posts.map((post) =>
+            post === modifiedPost ? { ...post, isModified: true } : post
+        );
+        setPosts(updatedPosts);
+        localStorage.setItem("blogPosts", JSON.stringify(updatedPosts));
+    };
 
-export const useBlogContext = () => {
-  return useContext(BlogContext);
+    useEffect(() => {
+        try {
+            const storedPosts = localStorage.getItem("blogPosts");
+            if (storedPosts) {
+                setPosts(JSON.parse(storedPosts));
+            }
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+        }
+    }, []);
+
+    return (
+        <BlogContext.Provider
+            value={{ posts, createPost, updateState, deletePost, modifyPost }}
+        >
+            {children}
+        </BlogContext.Provider>
+    );
 };
 
 export default BlogContext;

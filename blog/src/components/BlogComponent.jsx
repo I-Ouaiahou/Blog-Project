@@ -1,169 +1,135 @@
-import React, { useState, useEffect } from 'react';
-import { useBlogContext } from '../context/BlogContext';
-import PostForm from './PostForm';
-import PostList from './PostList';
+import React, { useState, useContext } from "react";
+import { BlogContext } from "../context/BlogContext";
+import PostForm from "./PostForm";
+import PostList from "./PostList";
 
 function BlogComponent() {
-  const { posts, createPost, modifyPost, deletePost } = useBlogContext();
-  const [isCreatingPost, setIsCreatingPost] = useState(false);
-  const [isModifyingPost, setIsModifyingPost] = useState(false);
-  const [displayPosts, setDisplayPosts] = useState(false);
-  const [formData, setFormData] = useState({ title: '', content: '' });
+    const { posts, updateState } = useContext(BlogContext);
+    console.log(posts);
+    console.log("Posts:", posts);
+    const [isCreatingPost, setIsCreatingPost] = useState(false);
+    const [isModifyingPost, setIsModifyingPost] = useState(false);
+    const [formData, setFormData] = useState({ title: "", content: "" });
 
- 
-  useEffect(() => {
-    const savedPosts = localStorage.getItem('blogPosts');
-    if (savedPosts) {
-      createPost(JSON.parse(savedPosts));
+    function startCreatingPost() {
+        setIsCreatingPost(true);
     }
-  }, []);
 
-  function startCreatingPost() {
-    setIsCreatingPost(true);
-  }
-
-  function cancelCreatingPost() {
-    setIsCreatingPost(false);
-    setFormData({ title: '', content: '' });
-  }
-
-  function handleCreatePost() {
-    const newPosts = [...posts, formData];
-    
-   
-    const limitedPosts = newPosts.slice(-10);
-  
-    createPost(limitedPosts);
-  
-    
-    localStorage.setItem('blogPosts', JSON.stringify(limitedPosts));
-  
-    setFormData({ title: '', content: '' });
-    setIsCreatingPost(false);
-  }
-  
-
-  function startModifyingPost() {
-    setIsModifyingPost(true);
-  }
-
-  function cancelModifyingPost() {
-    setIsModifyingPost(false);
-    setFormData({ title: '', content: '' });
-  }
-
-  function handleModifyPost() {
-    modifyPost(formData);
-    setFormData({ title: '', content: '' });
-    setIsModifyingPost(false);
-  }
-
-  function handleDeletePost() {
-    if (posts && posts.length > 0) {
-      const postToDelete = posts[0];
-      deletePost(postToDelete);
-    } else {
-      console.log('No posts to delete.');
+    function cancelCreatingPost() {
+        setIsCreatingPost(false);
+        setFormData({ title: "", content: "" });
     }
+
+    function handleCreatePost() {
+        const newPost = { title: formData.title, content: formData.content };
+        updateState({ post: newPost });
+        setFormData({ title: "", content: "" });
+        setIsCreatingPost(false);
+    }
+
+    function startModifyingPost() {
+        setIsModifyingPost(true);
+    }
+
+    function cancelModifyingPost() {
+        setIsModifyingPost(false);
+        setFormData({ title: "", content: "" });
+    }
+
+    function handleModifyPost() {
+      const modifiedPost = {
+          title: formData.title,
+          content: formData.content,
+      };
+      
+      const postIndex = posts.findIndex((post) => post.title === formData.title);
+    
+      updateState((prevPosts) => {
+          const newPosts = [...prevPosts];
+          newPosts[postIndex] = modifiedPost;
+          return newPosts;
+      });
+      setFormData({ title: "", content: "" });
+      setIsModifyingPost(false);
   }
+  
+    return (
+        <div style={styles.container}>
+            <h1 style={{ textAlign: "center" }}>Welcome to Blogging</h1>
+            <div style={styles.buttonsContainer}>
+                <button style={styles.button} onClick={startCreatingPost}>
+                    Create Post
+                </button>
+            </div>
 
-  function handleDisplayPosts() {
-    setDisplayPosts(true);
-  }
+            {isCreatingPost && (
+                <PostForm
+                    setFormData={setFormData}
+                    formData={formData}
+                    onSave={handleCreatePost}
+                    onCancel={cancelCreatingPost}
+                />
+            )}
 
-  function handleHidePosts() {
-    setDisplayPosts(false);
-  }
+            {isModifyingPost && (
+                <div>
+                    <label>Title:</label>
+                    <input
+                        type="text"
+                        value={formData.title}
+                        onChange={(e) => {
+                            setFormData({ ...formData, title: e.target.value });
+                        }}
+                    />
 
-  return (
-    <div style={styles.container}>
-      <h1 style={{ textAlign: 'center' }}>React Blog</h1>
-      <div style={styles.buttonsContainer}>
-        <button style={styles.button} onClick={startCreatingPost}>
-          Create Post
-        </button>
-        <button style={styles.button} onClick={startModifyingPost}>
-          Modify Post
-        </button>
-        <button style={styles.button} onClick={handleDeletePost}>
-          Delete Post
-        </button>
-        <button style={styles.button} onClick={handleDisplayPosts}>
-          View Posts
-        </button>
-        {displayPosts && (
-          <button style={styles.button} onClick={handleHidePosts}>
-            Hide Posts
-          </button>
-        )}
-      </div>
+                    <label>Content:</label>
+                    <textarea
+                        value={formData.content}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                content: e.target.value,
+                            })
+                        }
+                    />
 
-      {isCreatingPost && (
-        <PostForm onSave={handleCreatePost} onCancel={cancelCreatingPost} />
-      )}
+                    <button style={styles.button} onClick={handleModifyPost}>
+                        Save Changes
+                    </button>
+                    <button style={styles.button} onClick={cancelModifyingPost}>
+                        Cancel
+                    </button>
+                </div>
+            )}
 
-      {isModifyingPost && (
-        <div>
-          <label>Title:</label>
-          <input
-            type="text"
-            value={formData.title}
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
-          />
-
-          <label>Content:</label>
-          <textarea
-            value={formData.content}
-            onChange={(e) =>
-              setFormData({ ...formData, content: e.target.value })
-            }
-          />
-
-          <button style={styles.button} onClick={handleModifyPost}>
-            Save Changes
-          </button>
-          <button style={styles.button} onClick={cancelModifyingPost}>
-            Cancel
-          </button>
+            <PostList posts={posts} />
         </div>
-      )}
-
-      {displayPosts && (
-        <div>
-          <h2 style={styles.subHeading}>View Post</h2>
-          {/* Display posts here */}
-          <PostList posts={posts} />
-        </div>
-      )}
-    </div>
-  );
+    );
 }
 
 const styles = {
-  container: {
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '20px',
-  },
-  heading: {
-    fontSize: '24px',
-    marginBottom: '20px',
-  },
-  subHeading: {
-    fontSize: '20px',
-    marginBottom: '10px',
-  },
-  buttonsContainer: {
-    marginBottom: '20px',
-  },
-  button: {
-    margin: '5px',
-    padding: '8px 16px',
-    fontSize: '16px',
-    cursor: 'pointer',
-  },
+    container: {
+        maxWidth: "800px",
+        margin: "0 auto",
+        padding: "20px",
+    },
+    heading: {
+        fontSize: "24px",
+        marginBottom: "20px",
+    },
+    subHeading: {
+        fontSize: "20px",
+        marginBottom: "10px",
+    },
+    buttonsContainer: {
+        marginBottom: "20px",
+    },
+    button: {
+        margin: "5px",
+        padding: "8px 16px",
+        fontSize: "16px",
+        cursor: "pointer",
+    },
 };
 
 export default BlogComponent;
