@@ -27,7 +27,7 @@ export const BlogProvider = ({ children }) => {
 
     const modifyPost = (modifiedPost) => {
         const updatedPosts = posts.map((post) =>
-            post === modifiedPost ? { ...post, isModified: true } : post
+            post.title === modifiedPost.title ? { ...post, ...modifiedPost, isModified: true } : post
         );
         setPosts(updatedPosts);
         localStorage.setItem("blogPosts", JSON.stringify(updatedPosts));

@@ -4,10 +4,10 @@ import PostForm from './PostForm';
 import PostList from './PostList';
 
 function BlogComponent() {
-  const { posts, createPost, modifyPost, deletePost } = useContext(BlogContext);
+  const { posts, createPost, modifyPost } = useContext(BlogContext);
   const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [isModifyingPost, setIsModifyingPost] = useState(false);
-  const [displayPosts, setDisplayPosts] = useState(false);
+  const [setDisplayPosts] = useState(false);
   const [formData, setFormData] = useState({ title: '', content: '' });
 
   useEffect(() => {
@@ -15,7 +15,7 @@ function BlogComponent() {
     if (savedPosts) {
       createPost(JSON.parse(savedPosts));
     }
-  }, []);
+  }, []); 
 
   function startCreatingPost() {
     setIsCreatingPost(true);
@@ -47,7 +47,7 @@ function BlogComponent() {
       title: formData.title,
       content: formData.content,
     };
-   
+    
     const postIndex = posts.findIndex((post) => post.title === formData.title);
     
     modifyPost(modifiedPost);

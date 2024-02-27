@@ -99,7 +99,6 @@ function PostList() {
 }
 
 const styles = {
-    // ... (your existing styles)
     textarea: {
         width: "100%",
         minHeight: "100px",
